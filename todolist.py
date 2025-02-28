@@ -51,6 +51,11 @@ class TodoList:
     def remove_at(self, idx):
         self._todos.pop(idx)
 
+    def mark_done(self, title):
+        target = self.find_by_title(title)
+
+        target.done = True
+
     def mark_done_at(self, idx):
         self.todo_at(idx).done = True
 
@@ -58,12 +63,10 @@ class TodoList:
         self.todo_at(idx).done = False
 
     def mark_all_done(self):
-        for todo in self._todos:
-            todo.done = True
+        self.each(lambda todo: setattr(todo, 'done', True))
 
     def mark_all_undone(self):
-        for todo in self._todos:
-            todo.done = False
+        self.each(lambda todo: setattr(todo, 'done', False))
 
     def all_done(self):
         return all(todo.done for todo in self._todos)
@@ -80,6 +83,17 @@ class TodoList:
     def to_list(self):
         return self._todos.copy()
 
+    def find_by_title(self, title):
+        target = self.select(lambda todo: todo.title == title)
+
+        return target.todo_at(0)
+
+    def done_todos(self):
+        return self.select(lambda todo: todo.done)
+
+    def undone_todos(self):
+        return self.select(lambda todo: not todo.done)
+
     def select(self, callback):
         new_todo = TodoList(self.title)
 
@@ -88,6 +102,8 @@ class TodoList:
                 new_todo.add(todo)
 
         self.each(choose)
+
+        return new_todo
 
     def each(self, callback):
         for todo in self._todos:
