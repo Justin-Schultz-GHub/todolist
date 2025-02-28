@@ -3,13 +3,13 @@ class Todo:
     IS_UNDONE = ' '
 
 
-    def __init__(self, item):
-        self._item = item
+    def __init__(self, title):
+        self._title = title
         self._done = False
 
     @property
     def item(self):
-        return self._item
+        return self._title
 
     @property
     def done(self):
@@ -42,10 +42,6 @@ class TodoList:
     def title(self):
         return self._title
 
-    @property
-    def todos(self):
-        return self._todos
-
     def add(self, todo):
         if not isinstance(todo, Todo):
             raise TypeError('Can only add Todo objects to TodoList')
@@ -53,7 +49,7 @@ class TodoList:
         self._todos.append(todo)
 
     def remove_at(self, idx):
-        self.todos.pop(idx)
+        self._todos.pop(idx)
 
     def mark_done_at(self, idx):
         self.todo_at(idx).done = True
@@ -62,30 +58,34 @@ class TodoList:
         self.todo_at(idx).done = False
 
     def mark_all_done(self):
-        for todo in self.todos:
+        for todo in self._todos:
             todo.done = True
 
     def mark_all_undone(self):
-        for todo in self.todos:
+        for todo in self._todos:
             todo.done = False
 
     def all_done(self):
-        return all(todo.done for todo in self.todos)
+        return all(todo.done for todo in self._todos)
 
     def first(self):
-        return self.todos[0]
+        return self._todos[0]
 
     def last(self):
-        return self.todos[-1]
+        return self._todos[-1]
 
     def todo_at(self, idx):
-        return self.todos[idx]
+        return self._todos[idx]
 
     def to_list(self):
-        return self.todos.copy()
+        return self._todos.copy()
+
+    def each(self, callback):
+        for todo in self._todos:
+            callback(todo)
 
     def __len__(self):
-        return len(self.todos)
+        return len(self._todos)
 
     def __str__(self):
         return (f'----- {self.title} -----\n' +
@@ -107,5 +107,4 @@ def setup():
     todo_list.add(todo3)
 
     return todo_list
-
 
