@@ -8,7 +8,7 @@ class Todo:
         self._done = False
 
     @property
-    def item(self):
+    def title(self):
         return self._title
 
     @property
@@ -26,11 +26,11 @@ class Todo:
         if not isinstance(other, Todo):
             return NotImplemented
 
-        return self.item == other.item and self.done == other.done
+        return self.title == other.title and self.done == other.done
 
     def __str__(self):
         marker = Todo.IS_DONE if self.done else Todo.IS_UNDONE
-        return f'[{marker}] {self.item}'
+        return f'[{marker}] {self.title}'
 
 
 class TodoList:
@@ -79,6 +79,15 @@ class TodoList:
 
     def to_list(self):
         return self._todos.copy()
+
+    def select(self, callback):
+        new_todo = TodoList(self.title)
+
+        def choose(todo):
+            if callback(todo):
+                new_todo.add(todo)
+
+        self.each(choose)
 
     def each(self, callback):
         for todo in self._todos:
