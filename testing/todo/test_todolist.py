@@ -72,7 +72,7 @@ class TestTodoList(unittest.TestCase):
             self.todos.remove_at(len(self.todos) + 1)
 
         self.todos.remove_at(2)
-        self.assertEquals([self.todo1, self.todo2], self.todos.to_list())
+        self.assertEqual([self.todo1, self.todo2], self.todos.to_list())
 
     def test_str(self):
         todos_str = (
@@ -85,17 +85,38 @@ class TestTodoList(unittest.TestCase):
         self.assertEqual(todos_str, str(self.todos))
 
 
-    # def (self):
-    #     self.assertEqual()
+    def test_str_done_todo(self):
+        todos_str = (
+                    '----- Today\'s Todos -----\n'
+                    '[X] Buy milk\n'
+                    '[ ] Clean room\n'
+                    '[ ] Go to the gym'
+                    )
 
-    # def (self):
-    #     self.assertEqual()
+        self.todos.mark_done_at(0)
+        self.assertEqual(todos_str, str(self.todos))
 
-    # def (self):
-    #     self.assertEqual()
+    def test_str_all_done_todos(self):
+        todos_str = (
+                    '----- Today\'s Todos -----\n'
+                    '[X] Buy milk\n'
+                    '[X] Clean room\n'
+                    '[X] Go to the gym'
+                    )
 
-    # def (self):
-    #     self.assertEqual()
+        self.todos.mark_all_done()
+        self.assertEqual(todos_str, str(self.todos))
+
+    def test_each(self):
+        result = []
+        self.todos.each(lambda todo: result.append(todo))
+        self.assertEqual(result, [self.todo1, self.todo2, self.todo3])
+
+    def test_select(self):
+        self.todo1.done = True
+        self.assertEqual('----- Today\'s Todos -----\n[X] Buy milk',
+                        str(self.todos.select(lambda todo: todo.done))
+                        )
 
 
 if __name__ == "__main__":
