@@ -2,3 +2,5 @@ misc_code.py
 __pycache__/
 .coverage
 test_cases.py
+mock_log.txt
+temp_csv.csv
