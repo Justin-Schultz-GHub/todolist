@@ -4,3 +4,4 @@ __pycache__/
 test_cases.py
 mock_log.txt
 temp_csv.csv
+.pylintrc
